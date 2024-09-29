@@ -1,0 +1,6 @@
+# Secret keys
+
+# k8s excluded files
+
+# cache
+.ruff_cache

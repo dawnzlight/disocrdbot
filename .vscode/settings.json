@@ -1,0 +1,19 @@
+{
+    "[toml]": {
+        "editor.defaultFormatter": "tamasfe.even-better-toml",
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": true,
+        "files.insertFinalNewline": true,
+    },
+    "[yaml][yml]": {
+        "editor.defaultFormatter": "redhat.vscode-yaml",
+        "editor.insertSpaces": true,
+        "editor.formatOnSave": true,
+        "files.insertFinalNewline": true,
+    },
+    "[json][jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features",
+        "editor.formatOnSave": true,
+        "files.insertFinalNewline": true,
+    }
+}

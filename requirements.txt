@@ -1,0 +1,7 @@
+# Discord用BotのPythonライブラリ
+discord.py==2.3.2
+
+# コード成型用ライブラリ
+ruff==0.4.6
+
+# テストライブラリ
