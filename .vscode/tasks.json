@@ -1,0 +1,61 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "git pull",
+            "type": "shell",
+            "command": "git pull",
+            "args": [],
+            "problemMatcher": [],
+        },
+        {
+            "label": "新規タスクの作成(新規ブランチ作成)",
+            "type": "shell",
+            "command": "git checkout main && git pull && git checkout -b ${input:branchname}",
+            "args": [],
+            "problemMatcher": [],
+        },
+        {
+            "label": "コミット(git commit)",
+            "type": "shell",
+            "command": "git add ./ && git commit -m \"${input:commitmessage}\"",
+            "args": [],
+            "problemMatcher": [],
+        },
+        {
+            "label": "git push(ローカルリポジトリからリモートリポジトリへの反映)",
+            "type": "shell",
+            "command": "git push -u origin HEAD",
+            "args": [],
+            "problemMatcher": [],
+        },
+        {
+            "label": "stgにプルリクエストを作成",
+            "type": "shell",
+            "command": "pull_request",
+            "args": [],
+            "problemMatcher": [],
+        },
+        {
+            "label": "コードのフォーマット",
+            "type": "shell",
+            "command": "ruff check --fix .",
+            "args": [],
+            "problemMatcher": [],
+        }
+    ],
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "branchname",
+            "description": "新規作成するタスクのブランチ名を入力してください。",
+            "default": ""
+        },
+        {
+            "type": "promptString",
+            "id": "commitmessage",
+            "description": "コミットする際の変更内容を入力してください。",
+            "default": ""
+        }
+    ]
+}
