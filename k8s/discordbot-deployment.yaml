@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dawnzlight-discord-bot
+  namespace: dawnzlight-discord-bot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dawnzlight-discord-bot-pod
+  template:
+    metadata:
+      labels:
+        app: dawnzlight-discord-bot-pod
+    spec:
+      containers:
+        - name: discord-bot-container
+          image: ghcr.io/longlangu/arm32v7/python-dicordbot:latest
+          command: ["python", "main.py", "-e", "production"]
+          ports: 
+            - containerPort: 8443
+          env:
+            - name: ENVIRONMENT
+              value: production
+            - name: PYTHONDONTWRITEBYTECODE
+              value: "1"
+            - name: BOT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: dawnzlight-discord-bot-secret
+                  key: bot-token
+                  optional: false
+            - name: VOICE_CHAT_TEXT
+              valueFrom:
+                secretKeyRef:
+                  name: dawnzlight-discord-bot-secret
+                  key: voice-chat-text
+                  optional: false
+            - name: AnnounceChannelId1
+              valueFrom:
+                secretKeyRef:
+                  name: dawnzlight-discord-bot-secret
+                  key: announce-channel-id1
+                  optional: false
+            - name: AnnounceChannelId2
+              valueFrom:
+                secretKeyRef:
+                  name: dawnzlight-discord-bot-secret
+                  key: announce-channel-id2
+                  optional: false
+          resources:
+            limits:
+              cpu: "20m"
+              memory: "64Mi"
+          volumeMounts:
+            - name: mount
+              mountPath: /app
+        - name: git-sync
+          image: ghcr.io/longlangu/arm32v7/git-sync:v1.1.1
+          resources:
+            limits:
+              cpu: "30m"
+              memory: "16Mi"
+          env:
+            - name: REPO_URL
+              value: https://github.com/dawnzlight/discotdbot.git
+            - name: BRANCH
+              value: main
+            - name: WEBHOOK_URL
+              valueFrom:
+                secretKeyRef:
+                  name: dawnzlight-discord-bot-secret
+                  key: discord-webhook
+                  optional: false
+          volumeMounts:
+            - name: mount
+              mountPath: /git/src
+      volumes:
+        - name: mount
+          emptyDir: {}

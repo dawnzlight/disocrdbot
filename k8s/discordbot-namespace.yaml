@@ -1,0 +1,6 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: dawnzlight-discord-bot
+  labels:
+    name: dawnzlight-discord-bot
