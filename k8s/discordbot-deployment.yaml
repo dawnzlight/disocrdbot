@@ -48,6 +48,12 @@ spec:
                   name: dawnzlight-discord-bot-secret
                   key: announce-channel-id2
                   optional: false
+            - name: GEMINI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: dawnzlight-discord-bot-secret
+                  key: gemini-api-key
+                  optional: false
           resources:
             limits:
               cpu: "20m"
