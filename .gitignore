@@ -1,6 +1,6 @@
 # Secret keys
-
-# k8s excluded files
+**/*secret*
 
 # cache
 .ruff_cache
+**/__pycache__
