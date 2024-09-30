@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: discord-bot-container
-          image: ghcr.io/longlangu/arm32v7/python-dicordbot:latest
+          image: ghcr.io/longlangu/arm32v7/python-dicordbot:v1.0.0
           command: ["python", "main.py", "-e", "production"]
           ports: 
             - containerPort: 8443
@@ -63,7 +63,7 @@ spec:
               memory: "16Mi"
           env:
             - name: REPO_URL
-              value: https://github.com/dawnzlight/discotdbot.git
+              value: https://github.com/dawnzlight/discordbot.git
             - name: BRANCH
               value: main
             - name: WEBHOOK_URL
