@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: discord-bot-container
-          image: ghcr.io/longlangu/arm32v7/python-dicordbot:v1.0.0
+          image: ghcr.io/longlangu/arm32v7/python-dicordbot:latest
           command: ["python", "main.py", "-e", "production"]
           ports: 
             - containerPort: 8443
@@ -56,8 +56,8 @@ spec:
                   optional: false
           resources:
             limits:
-              cpu: "20m"
-              memory: "64Mi"
+              cpu: "60m"
+              memory: "128Mi"
           volumeMounts:
             - name: mount
               mountPath: /app
