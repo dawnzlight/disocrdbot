@@ -1,4 +1,5 @@
 import argparse
+import asyncio
 
 import discord
 from discord.ext import commands
@@ -43,24 +44,26 @@ if __name__ == '__main__':
     if env == 'development':
         @client.command()
         async def sakura(ctx, prompt):
-            response = gemini.generate_content(prompt)
-            message = response['candidates'][0]['content']['parts'][0]['text']
-            await ctx.send(message)
+            async with ctx.typing():
+                response = gemini.generate_content(prompt)
+                message = response['candidates'][0]['content']['parts'][0]['text']
+                await ctx.send(message)
 
     if env == 'production':
         @client.command()
         async def shizuku(ctx, prompt):
-            response = gemini.generate_content(prompt)
-            message = response['candidates'][0]['content']['parts'][0]['text']
-            await ctx.send(message)
+            async with ctx.typing():
+                response = gemini.generate_content(prompt)
+                message = response['candidates'][0]['content']['parts'][0]['text']
+                await ctx.send(message)
 
-    # async def main():
-    #     try:
-    #         await client.start(config.get_discord_bot_token())
-    #     except KeyboardInterrupt:
-    #         await client.close()
-    #     finally:
-    #         await asyncio.sleep(0.1)
+    async def main():
+        try:
+            await client.start(config.get_discord_bot_token())
+        except KeyboardInterrupt:
+            await client.close()
+        finally:
+            await asyncio.sleep(0.1)
 
-    # asyncio.run(main())
-    client.run(config.get_discord_bot_token())
+    asyncio.run(main())
+    # client.run(config.get_discord_bot_token())

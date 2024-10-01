@@ -16,8 +16,8 @@ async def voice_channel_in_and_out_send(member, before, after, client, config):
     if before.channel != after.channel:
         # 入室時の処理
         if after.channel is not None:
-            await text_channel_in_and_out_send.send(f'{member.name} が {after.channel.name} に入室しました。')
+            await text_channel_in_and_out_send.send(f'{member.name} が {after.channel.name} に入室したよ。')
         # 退室時の処理
         elif before.channel is not None:
-            await text_channel_in_and_out_send.send(f'{member.name} が {before.channel.name} から退室しました。')
+            await text_channel_in_and_out_send.send(f'{member.name} が {before.channel.name} から退室したよ。')
     
