@@ -1,3 +1,7 @@
+
+from .utils import extract_changed_files_from_diff
+
+
 async def voice_channel_in_and_out_send(member, before, after, client, config):
     """
     ボイスチャンネルに入退室した際に通知を行う関数
@@ -20,4 +24,37 @@ async def voice_channel_in_and_out_send(member, before, after, client, config):
         # 退室時の処理
         elif before.channel is not None:
             await text_channel_in_and_out_send.send(f'{member.name} が {before.channel.name} から退室したよ。')
+
+def pull_request_summary_action(github, gemini):
+    """
+    プルリクエストの要約を行う関数
+    :param
+        github: Github
+        gemini: Gemini
+    """
+
+    pull_requests = github.get_pull_requests('all-you-can-drink')
+
+    if len(pull_requests) == 0:
+        return ['プルリクエストを確認したら、見つからなかったよ。']
+
+    messages = []
+
+    for i, pull_request in enumerate(pull_requests):
+
+        response = github.get_diff('all-you-can-drink', pull_request['number']).text
+        changed_files = extract_changed_files_from_diff(response)
+
+        prompt = f'{i+1}つ目のプルリクエストの変更ファイルを見て、その内容について要約してください。' + \
+        f"5行程度にまとめてください。また回答は「{pull_request['user']}さんからのプルリクだよ。」で始めてください。" \
+        '変更があったファイルは以下の通りです。元気よくお願いします！！' + \
+        ' '.join([f"{file['file_name']}、追加された行：{file['diff']['plus']}、削除された行：{file['diff']['minus']}" for file in changed_files])
+
+        response = gemini.generate_content(prompt=prompt)
+        
+        messages.append(response['candidates'][0]['content']['parts'][0]['text'] + f"\n{pull_request['reviewers'][0]}さん。レビューお願いね！！。" + \
+        f"\nURL：{pull_request['url']}")
+
+    return messages
+
     
