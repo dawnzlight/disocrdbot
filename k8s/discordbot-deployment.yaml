@@ -54,6 +54,12 @@ spec:
                   name: dawnzlight-discord-bot-secret
                   key: gemini-api-key
                   optional: false
+            - name: GITHUB_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: dawnzlight-discord-bot-secret
+                  key: github-api-key
+                  optional: false
           resources:
             limits:
               cpu: "60m"
