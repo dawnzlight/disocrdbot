@@ -79,3 +79,5 @@ if __name__ == '__main__':
                 await client.close()
             finally:
                 await asyncio.sleep(0.1)
+        
+        asyncio.run(main())
