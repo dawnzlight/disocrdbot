@@ -42,6 +42,9 @@ def pull_request_summary_action(github, gemini):
 
     for i, pull_request in enumerate(pull_requests):
 
+        reviewers = github.assign_reviewer('all-you-can-drink', pull_request['number'], pull_request['user']).json()
+        reviewers = [github.get_disocrd_member_id(reviewer['login']) for reviewer in reviewers['requested_reviewers']][0]
+
         response = github.get_diff('all-you-can-drink', pull_request['number']).text
         changed_files = extract_changed_files_from_diff(response)
 
@@ -51,9 +54,21 @@ def pull_request_summary_action(github, gemini):
         ' '.join([f"{file['file_name']}、追加された行：{file['diff']['plus']}、削除された行：{file['diff']['minus']}" for file in changed_files])
 
         response = gemini.generate_content(prompt=prompt)
-        
-        messages.append(response['candidates'][0]['content']['parts'][0]['text'] + f"\n{pull_request['reviewers'][0]}さん。レビューお願いね！！。" + \
-        f"\nURL：{pull_request['url']}")
+
+        message = response['candidates'][0]['content']['parts'][0]['text']
+
+        try:
+            github.comment_to_pull_request('all-you-can-drink', pull_request['number'], message)
+        except Exception as e:
+            print(e)
+
+        if len(reviewers) == 0:
+            message = message + f"\nURL：{pull_request['html_url']}"
+        else:
+            message = message + f"\n<@{reviewers}>さん。レビューお願いね！！。" + \
+            f"\nURL：{pull_request['html_url']}"
+            
+        messages.append(message)
 
     return messages
 
