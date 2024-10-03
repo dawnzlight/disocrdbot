@@ -26,6 +26,21 @@ class Github:
             return self.discord_member_id[member]
         else:
             return member
+        
+    def get_pull_request(self, repo, pull_request_number):
+        headers = self.headers
+        headers['Accept'] = 'application/vnd.github.v3+json'
+        response =  requests.get(f"{self.url}/repos/{self.owner}/{repo}/pulls/{pull_request_number}", headers=headers).json()
+
+        return {
+            'url': response['url'],
+            'html_url': response['html_url'],
+            'title': response['title'],
+            'number': response['number'],
+            'user':response['user']['login'],
+            "created_at": response['created_at'],
+            "reviewers": [ self.get_disocrd_member_id(reviewer['login']) for reviewer in response['requested_reviewers']],
+        }
 
     def get_pull_requests(self, repo):
 
