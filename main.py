@@ -1,10 +1,11 @@
 import argparse
 import asyncio
+import re
 
 import discord
 from discord.ext import commands
 
-from bot.bot_actions import pull_request_summary_action, voice_channel_in_and_out_send
+from bot.bot_actions import pull_request_summary_action, pull_requests_summary_action, voice_channel_in_and_out_send
 from bot.config import DevelopmentConfig, ProductionConfig
 from bot.gemini_api import Gemini
 from bot.github_api import Github
@@ -43,6 +44,19 @@ if __name__ == '__main__':
     async def on_voice_state_update(member, before, after):
         await voice_channel_in_and_out_send(member, before, after, client, config)
     
+    @client.listen('on_message')
+    async def on_message(message):
+        if message.author == client.user:
+            return
+        match = re.match(r'\$pull_request_summary (\d+)', message.content)
+        if match:
+            number = match.group(1)
+            async with message.channel.typing():
+                response_message = pull_request_summary_action(github, gemini, number)
+                await message.channel.send(response_message)
+        else:
+            return
+
     if env == 'development':
         @client.command()
         async def sakura(ctx, prompt):
@@ -62,11 +76,19 @@ if __name__ == '__main__':
                 await ctx.send(message)
 
     @client.command()
-    async def pull_request_summary(ctx):
+    async def pull_requests_summary(ctx):
         async with ctx.typing():
-            messages = pull_request_summary_action(github, gemini)
+            messages = pull_requests_summary_action(github, gemini)
             for message in messages:
                 await ctx.send(message)
+
+    @client.command()
+    async def pull_request_summary(ctx, number=None):
+        if number is None:
+            return  
+        async with ctx.typing():
+            message = pull_request_summary_action(github, gemini, number)
+            await ctx.send(message)
 
     if env == 'development':
         client.run(config.get_discord_bot_token())
