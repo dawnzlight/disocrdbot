@@ -42,6 +42,27 @@
             "command": "ruff check --fix .",
             "args": [],
             "problemMatcher": [],
+        },
+        {
+            "label": "DBの起動",
+            "type": "shell",
+            "command": "docker-compose up -d",
+            "args": [],
+            "problemMatcher": [],
+        },
+        {
+            "label": "DBの停止",
+            "type": "shell",
+            "command": "docker-compose down",
+            "args": [],
+            "problemMatcher": [],
+        },
+        {
+            "label": "DBの削除",
+            "type": "shell",
+            "command": "docker-compose down --rmi all -v",
+            "args": [],
+            "problemMatcher": [],
         }
     ],
     "inputs": [
