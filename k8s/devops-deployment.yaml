@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dawnzlight-devops-deployment
+  namespace: dawnzlight
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dawnzlight-devops-pod
+  template:
+    metadata:
+      labels:
+        app: dawnzlight-devops-pod
+    spec:
+      serviceAccountName: devops-service-account
+      containers:
+        - name: devops
+          image: ghcr.io/longlangu/arm32v7/devops:latest
+          resources:
+            limits:
+              cpu: "60m"
+              memory: "64Mi"
+          env:
+            - name: REPO_URL
+              value: https://github.com/dawnzlight/discordbot.git
+            - name: BRANCH
+              value: main
+            - name: DEPLOYMENT
+              value: dawnzlight-discord-deployment

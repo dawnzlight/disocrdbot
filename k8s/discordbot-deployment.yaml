@@ -1,8 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dawnzlight-discord-bot
-  namespace: dawnzlight-discord-bot
+  name: dawnzlight-discord-deployment
+  namespace: dawnzlight
 spec:
   replicas: 1
   selector:
@@ -16,8 +16,7 @@ spec:
       containers:
         - name: discord-bot-container
           image: ghcr.io/longlangu/arm32v7/python-dicordbot:latest
-          command: ["python", "main.py", "-e", "production"]
-          ports: 
+          ports:
             - containerPort: 8443
           env:
             - name: ENVIRONMENT
