@@ -6,6 +6,7 @@
         "files.insertFinalNewline": true,
     },
     "[yaml][yml]": {
+        "editor.tabSize": 2,
         "editor.defaultFormatter": "redhat.vscode-yaml",
         "editor.insertSpaces": true,
         "editor.formatOnSave": true,
