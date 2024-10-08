@@ -76,6 +76,13 @@ if __name__ == '__main__':
                 await ctx.send(message)
 
     @client.command()
+    async def gemini_api(ctx, prompt):
+        async with ctx.typing():
+            response = gemini.generate_content(prompt=prompt, category='default')
+            message = response['candidates'][0]['content']['parts'][0]['text']
+            await ctx.send(message)
+
+    @client.command()
     async def pull_requests_summary(ctx):
         async with ctx.typing():
             messages = pull_requests_summary_action(github, gemini)
