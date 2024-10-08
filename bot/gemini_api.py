@@ -25,6 +25,11 @@ class Gemini:
                 'contents': [{'parts':[{"text":self.config.get_prompt(f'{text} {prompt}')}]}]
             }
             return requests.post(f"{self.url}:generateContent?key={self.api_key}", headers=self.headers, json=data).json()
+        elif category == 'default':
+            data = {
+                'contents': [{'parts':[{"text":prompt}]}]
+            }
+            return requests.post(f"{self.url}:generateContent?key={self.api_key}", headers=self.headers, json=data).json()
         else:
             data = {
                 'contents': [{'parts':[{"text":self.config.get_prompt(prompt)}]}]
