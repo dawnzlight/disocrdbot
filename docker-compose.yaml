@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: sakura
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: 'discordbot-develpoment'
+      POSTGRES_DB: 'discordbot-development'
     ports:
       - "5432:5432"
     volumes:

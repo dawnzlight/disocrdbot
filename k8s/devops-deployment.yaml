@@ -28,3 +28,21 @@ spec:
               value: main
             - name: DEPLOYMENT
               value: dawnzlight-discord-deployment
+            - name: GOOSE_DRIVER
+              value: postgres
+            - name: POSTGRES_HOST
+              value: postgresql-service.discord-db.svc.cluster.local
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: dawnzlight-discord-bot-secret
+                  key: postgres_user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: dawnzlight-discord-bot-secret
+                  key: postgres_password
+            - name: POSTGRES_DB
+              value: dawnzlight
