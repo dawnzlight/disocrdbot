@@ -9,6 +9,7 @@ from bot.bot_actions import pull_request_summary_action, pull_requests_summary_a
 from bot.config import DevelopmentConfig, ProductionConfig
 from bot.gemini_api import Gemini
 from bot.github_api import Github
+from bot.postgre_sql import get_connection
 
 envs = {
     'development': DevelopmentConfig,
@@ -82,6 +83,15 @@ if __name__ == '__main__':
             message = response['candidates'][0]['content']['parts'][0]['text']
             await ctx.send(message)
 
+    @client.command()
+    async def db_check(ctx, *prompt):
+        async with ctx.typing():
+            with get_connection(config) as conn:
+                with conn.cursor() as cur:
+                    cur.execute('SELECT * FROM t_healthcheck')
+                    colnames = [col.name for col in cur.description]
+                    await ctx.send(','.join(colnames))
+                    
     @client.command()
     async def pull_requests_summary(ctx):
         async with ctx.typing():
