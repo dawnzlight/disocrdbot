@@ -59,26 +59,26 @@ if __name__ == '__main__':
 
     if env == 'development':
         @client.command()
-        async def sakura(ctx, prompt):
+        async def sakura(ctx, *prompt):
             user = ctx.author
             async with ctx.typing():
-                response = gemini.generate_content(prompt=f"ちなみに私とは{user}のことです。"+prompt, category='question')
+                response = gemini.generate_content(prompt=f"ちなみに私とは{user}のことです。"+' '.join(prompt), category='question')
                 message = response['candidates'][0]['content']['parts'][0]['text']
                 await ctx.send(message)
 
     if env == 'production':
         @client.command()
-        async def shizuku(ctx, prompt):
+        async def shizuku(ctx, *prompt):
             user = ctx.author
             async with ctx.typing():
-                response = gemini.generate_content(prompt=f"ちなみに私とは{user}のことです。"+prompt, category='question')
+                response = gemini.generate_content(prompt=f"ちなみに私とは{user}のことです。"+' '.join(prompt), category='question')
                 message = response['candidates'][0]['content']['parts'][0]['text']
                 await ctx.send(message)
 
     @client.command()
-    async def gemini_api(ctx, prompt):
+    async def gemini_api(ctx, *prompt):
         async with ctx.typing():
-            response = gemini.generate_content(prompt=prompt, category='default')
+            response = gemini.generate_content(prompt=' '.join(prompt), category='default')
             message = response['candidates'][0]['content']['parts'][0]['text']
             await ctx.send(message)
 
