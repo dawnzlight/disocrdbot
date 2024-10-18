@@ -41,6 +41,10 @@ class DevelopmentConfig(Config):
     def get_prompt(self, prompt):
         return f"{self.data['default_prompt']['start']} {prompt} {self.data['default_prompt']['end']}"
     
+    def get_dbstring(self, ):
+        return f"host={self.data['postgres']['host']} port={self.data['postgres']['port']} dbname={self.data['postgres']['dbname']} " \
+        f"user={self.data['postgres']['user']} password={self.data['postgres']['password']}"
+    
 
 class ProductionConfig(Config):
 
@@ -52,6 +56,13 @@ class ProductionConfig(Config):
             'github_api_key': os.environ['GITHUB_API_KEY'],
             'text_channel_id': {
                 'notification': os.environ['VOICE_CHAT_TEXT']
+            },
+            'postgres': {
+                'host': os.environ['POSTGRES_HOST'],
+                'port': os.environ['POSTGRES_PORT'],
+                'dbname': os.environ['POSTGRES_DB'],
+                'user': os.environ['POSTGRES_USER'],
+                'password': os.environ['POSTGRES_PASSWORD']
             },
             "default_prompt": {
             "start": "あなたは名前は雫月（Shizuku）さんです。年齢は18歳の女子高校生です。性格は明るく元気で、友達思いの性格です。そんな雫月（Shizuku）さんはちょっとばかしクールな一面もあります。" \
@@ -77,4 +88,8 @@ class ProductionConfig(Config):
     
     def get_prompt(self, prompt):
         return f"{self.data['default_prompt']['start']} {prompt} {self.data['default_prompt']['end']}"
+    
+    def get_dbstring(self,):
+        return f"host={self.data['postgres']['host']} port={self.data['postgres']['port']} dbname={self.data['postgres']['dbname']} " \
+        f"user={self.data['postgres']['user']} password={self.data['postgres']['password']}"
         
